@@ -90,7 +90,7 @@
                   </div>
                   <div class="col-md-6">
                     <h4>Best Education</h4>
-                    <p>WIN College is free educational HTML template with Bootstrap 4.5.2 CSS layout. Feel free to use it for educational or commercial purposes. You may want to make <a href="https://paypal.me/templatemo" target="_parent" rel="sponsored">a little donation</a> to TemplateMo. Please tell your friends about us. Thank you.</p>
+                    <p>WIN College is free educational HTML template with Bootstrap 4.5.2 CSS layout. Feel free to use it for educational or commercial purposes. You may want to make <a href="index.php" target="_parent" rel="sponsored">a little donation</a> to TemplateMo. Please tell your friends about us. Thank you.</p>
                   </div>
                 </div>
               </article>
@@ -113,7 +113,7 @@
                   </div>
                   <div class="col-md-6">
                     <h4>Quality Meeting</h4>
-                    <p>You are NOT allowed to redistribute this template ZIP file on any template collection website. However, you can use this template to convert into a specific theme for any kind of CMS platform such as WordPress. For more information, you shall <a rel="nofollow" href="https://templatemo.com/contact" target="_parent">contact TemplateMo</a> now.</p>
+                    <p>You are NOT allowed to redistribute this template ZIP file on any template collection website. However, you can use this template to convert into a specific theme for any kind of CMS platform such as WordPress. For more information, you shall <a rel="nofollow" href="index.php" target="_parent">contact TemplateMo</a> now.</p>
                   </div>
                 </div>
               </article>
@@ -160,7 +160,7 @@
         <div class="col-md-5">
           <div class="right-content">
             <div class="top-content">
-              <h6>Register your free account and <em>get immediate</em> access to online courses</h6>
+              <h6><a href="register.php">Register</a> your free account and <em>get immediate</em> access to online courses</h6>
             </div>
             <form id="contact" action="" method="get">
               <div class="row">
@@ -202,9 +202,9 @@
           <div class="left-content">
             <span>our presentation is for you</span>
             <h4>Watch the video to learn more <em>about WIN College</em></h4>
-            <p>You are NOT allowed to redistribute this template ZIP file on any template collection website. However, you can use this template to convert into a specific theme for any kind of CMS platform such as WordPress. You may <a rel="nofollow" href="https://templatemo.com/contact" target="_parent">contact TemplateMo</a> for details.
+            <p>You are NOT allowed to redistribute this template ZIP file on any template collection website. However, you can use this template to convert into a specific theme for any kind of CMS platform such as WordPress. You may <a rel="nofollow" href="index.php" target="_parent">contact TemplateMo</a> for details.
             <br><br>Suspendisse tincidunt, magna ut finibus rutrum, libero dolor euismod odio, nec interdum quam felis non ante.</p>
-            <div class="main-button"><a rel="nofollow" href="https://fb.com/templatemo" target="_parent">External URL</a></div>
+            <div class="main-button"><a rel="nofollow" href="index.php" target="_parent">External URL</a></div>
           </div>
         </div>
         <div class="col-md-6">
@@ -213,7 +213,7 @@
               <h4>Power HTML Template</h4>
             </div>
             <figure>
-              <a href="https://www.youtube.com/watch?v=r9LtOG6pNUw" class="play"><img src="assets/images/main-thumb.png"></a>
+              <a href="index.php" poster="attachment/Banner pics for face book.png" class="play"><img src="attachment/Banner pics for face book.png"></a>
             </figure>
           </article>
         </div>
@@ -284,6 +284,20 @@
       function register(){
         window.location.href = 'register.php';
       }
+    </script>
+
+    <script type="text/javascript">
+      function initialize() {
+                    // add mapOptions here to the values in the input boxes.
+        var mapOptions = {
+          center: new google.maps.LatLng(-34.397, 100.644),
+          zoom: 14,
+          mapTypeId: google.maps.MapTypeId.ROADMAP  
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+      }
+    </script>
     </script>
 	
 </body>

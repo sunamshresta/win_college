@@ -10,8 +10,8 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WIN College</title>
-    <meta name="description" content="">
+    <title>WIN College | Student-Portal</title>
+    <link rel="shortcut icon" href="../favicon.png">    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
 
@@ -49,7 +49,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <!-- Navbar Header-->
               <div class="navbar-header">
-                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                <!-- Navbar Brand --><a href="index.php" class="navbar-brand d-none d-sm-inline-block">
                   <div class="brand-text d-none d-lg-inline-block"><span>WIN </span><strong> Dashboard</strong></div>
                   <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
                 <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>

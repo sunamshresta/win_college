@@ -12,7 +12,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WIN College</title>
+    <title>WIN College | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
@@ -115,7 +115,7 @@
                   </ul>
                 </li>
                 <!-- Logout    -->
-                <li class="nav-item"><a href="login.html" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
+                <li class="nav-item"><a href="../logout.php" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
               </ul>
             </div>
           </div>
@@ -136,7 +136,7 @@
           <ul class="list-unstyled">
             <li class="<?php if($page=='admin'){ echo 'active'; } ?>"><a href="admin.php"> <i class="icon-user"></i>Admin </a></li>
             <li class="<?php if($page=='student'){ echo 'active'; } ?>"><a href="students.php"> <i class="fa fa-users"></i>Student </a></li>
-            <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li>
+            <!-- <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li> -->
             
           </ul>
         </nav>
