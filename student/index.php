@@ -121,16 +121,16 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
         <nav class="side-navbar">
           <!-- Sidebar Header-->
           <div class="sidebar-header d-flex align-items-center">
-            <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="avatar"><img src="../admin/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
             <div class="title">
-              <h1 class="h4">Mark Stephen</h1>
+              <h1 class="h4"><?php echo strtoupper($_SESSION['username']); ?></h1>
               <p>Web Designer</p>
             </div>
           </div>
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
             <!-- <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li> -->
-            <li class="active"><a href="students.php"> <i class="fa fa-users"></i>Student </a></li>
+            <li class="active"><a href="index.php"> <i class="fa fa-users"></i>Student </a></li>
             <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li>
             
           </ul>
@@ -142,15 +142,15 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
               <h2 class="no-margin-bottom">Dashboard</h2>
             </div>
           </header>
-
+          <?php if (!empty($_SESSION['success_msg'])) { ?>
+            <div class="alert alert-success">
+              <li>
+                <?php echo $_SESSION['success_msg']; ?>
+              </li>
+            </div>
           <?php 
-
-            require '../admin/connection.php';
-            $id = $_SESSION['id'];
-
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student' AND u.id = '$id'";
-
-          $result=mysqli_query($conn,$query);
+            }
+            unset($_SESSION['success_msg']);
            ?>
           
            <section class="tables">   
@@ -181,8 +181,22 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                           </thead>
                           <tbody>
                             <?php 
+
+                              require '../admin/connection.php';
+                              $id = $_SESSION['id'];
+
+                              $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u RIGHT join student_details as d ON u.student_detail= d.id WHERE u.type='student' AND u.id = '$id'";
+
+                              $result=mysqli_query($conn,$query);
                               $i=0; 
                               while ($user=mysqli_fetch_assoc($result)) { 
+                                echo "<pre>";
+          echo $id."<br>";
+          print_r($result);
+          print_r('user');
+          print_r($user);
+          echo "</pre>";
+          echo $user['detailId'];
                         ?>
                             
                             <tr>
@@ -191,10 +205,12 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                               <td><?php echo $user['username']; ?></td>
                               <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
                               <td>
-                                <a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
+                                <a class="fa fa-edit" href="edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
                               </td>
                             </tr>
-                            <?php ; } ?>
+                            <?php  } ?>
+
+
                           </tbody>
                         </table>
                       </div>

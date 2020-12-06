@@ -147,6 +147,16 @@
               <h2 class="no-margin-bottom">Dashboard</h2>
             </div>
           </header>
+          <?php if (!empty($_SESSION['success_msg'])) { ?>
+            <div class="alert alert-success">
+              <li>
+                <?php echo $_SESSION['success_msg']; ?>
+              </li>
+            </div>
+          <?php 
+            }
+            unset($_SESSION['success_msg']);
+           ?>
           <!-- Dashboard Counts Section-->
           <section class="dashboard-counts no-padding-bottom">
             <div class="container-fluid">

@@ -4,6 +4,7 @@ include_once 'send.php';
 $username = "";
 $email = "";
 $errors = [];
+$success = [];
 
 $conn = new mysqli('localhost', 'root', '', 'win_college');
 
@@ -64,12 +65,10 @@ if (isset($_POST['register-btn'])) {
 
             sendVerificationEmail($email, $token);
 
-            $_SESSION['id'] = $user_id;
             $_SESSION['username'] = $username;
             $_SESSION['email'] = $email;
             $_SESSION['verified'] = false;
-            $_SESSION['message'] = 'You are logged in!';
-            $_SESSION['type'] = 'alert-success';
+            $_SESSION['success_message'] = 'You have registered sucessfully! Please check you email to verify your account';
 
             header('location: login.php');
         } else {

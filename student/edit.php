@@ -117,9 +117,9 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
         <nav class="side-navbar">
           <!-- Sidebar Header-->
           <div class="sidebar-header d-flex align-items-center">
-            <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="avatar"><img src="../admin/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
             <div class="title">
-              <h1 class="h4"><?php echo $_SESSION['username']; ?></h1>
+              <h1 class="h4"><?php echo strtoupper($_SESSION['username']); ?></h1>
               <p>Web Designer</p>
             </div>
           </div>
@@ -143,11 +143,17 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
 
             require '../admin/connection.php';
             $userId = intval($_GET['id']);
+            echo $userId;
 
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student' AND d.id='$userId'";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT JOIN student_details as d ON u.student_detail=d.id WHERE u.type='student' AND u.student_detail ='$userId'";
 
-          $result=mysqli_query($conn,$query);
+          $result=mysqli_query($conn, $query);
           $user= mysqli_fetch_assoc($result);
+          echo "<pre>";
+          echo $userId."<br>";
+          print_r($result);
+          print_r($user);
+          echo "</pre>";
            ?>
           
            <section class="edit">   
@@ -211,7 +217,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                               <input type="text" name="username" class="form-control form-control-lg disabled" disabled="disabled" value="<?php echo $user['username']; ?>">
                             </div>
 
-                            <input type="hidden" name="id" value="<?php echo $userId; ?>">
+                            <input type="hidden" name="id" value="<?php echo $user['detailId']; ?>">
                             <div class="form-group">
                               <button type="submit" name="edit-btn" class="btn btn-lg btn-block">Update</button>
                             </div>

@@ -1,4 +1,7 @@
-<?php include 'emailConfig/auth_login.php'; ?>
+<?php 
+include 'emailConfig/auth_login.php';
+// session_start();
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +20,12 @@
     <div class="row">
       <div class="col-md-4 offset-md-4 form-wrapper auth login">
         <h3 class="text-center form-title">Login</h3>
-        <?php if (count($errors) > 0): ?>
+        <?php 
+        if (!empty($_SESSION['error_message'])) {
+          $errors = [$_SESSION['error_message']];
+        }
+        
+        if (count($errors) > 0 AND !empty($_SESSION['error_message'])): ?>
           <div class="alert alert-danger">
             <?php foreach ($errors as $error): ?>
             <li>
@@ -26,6 +34,18 @@
             <?php endforeach;?>
           </div>
         <?php endif;?>
+        <?php unset($_SESSION['error_message']); ?>
+
+        <?php if (!empty($_SESSION['success_message'])) { ?>
+          <div class="alert alert-success">
+            <li>
+              <?php echo $_SESSION['success_message']; ?>
+            </li>
+          </div>
+        <?php 
+          }
+          unset($_SESSION['success_message']);
+           ?>
         <form action="login.php" method="post">
           <div class="form-group">
             <label>Username or Email</label>
@@ -39,7 +59,7 @@
             <button type="submit" name="login-btn" class="btn btn-lg btn-block">Login</button>
           </div>
         </form>
-        <p>Don't yet have an account? <a href="register.php?register=true">Register Here</a></p>
+        <p>Don't yet have an account? <a href="register.php">Register Here</a></p>
       </div>
     </div>
   </div>

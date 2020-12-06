@@ -1,5 +1,9 @@
 <?php 
+session_start();
   $page='admin';
+  $username = "";
+$email = "";
+$errors = [];
  ?>
 <!DOCTYPE html>
 <html>
@@ -115,7 +119,7 @@
           <div class="sidebar-header d-flex align-items-center">
             <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
             <div class="title">
-              <h1 class="h4">Mark Stephen</h1>
+              <h1 class="h4"><?php echo strtoupper($_SESSION['username']); ?></h1>
               <p>Web Designer</p>
             </div>
           </div>
@@ -134,8 +138,20 @@
               <h2 class="no-margin-bottom">Dashboard</h2>
             </div>
           </header>
-
           <?php 
+        if (!empty($_SESSION['error_message'])) {
+          $errors = [$_SESSION['error_message']];
+        }
+        
+        if (count($errors) > 0 AND !empty($_SESSION['error_message'])): ?>
+          <div class="alert alert-danger">
+            <?php foreach ($errors as $error): ?>
+            <li>
+              <?php echo $error; ?>
+            </li>
+            <?php endforeach;?>
+          </div>
+        <?php endif;
 
             require 'connection.php';
 
@@ -162,7 +178,7 @@
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                         <form action="add_admin.php" method="post">
+                         <form action="add_admin_action.php" method="post">
                             <div class="form-group">
                               <label>Username</label>
                               <input type="text" name="username" class="form-control form-control-lg">
@@ -180,67 +196,10 @@
                               <input type="password" name="passwordConf" class="form-control form-control-lg">
                             </div>
                             <div class="form-group">
-                              <button type="submit" name="add-btn" class="btn btn-lg btn-block">Update</button>
+                              <button type="submit" name="add-btn" class="btn btn-lg btn-block">Add</button>
                             </div>
                           </form>
-                          <?php 
 
-// include_once '../emailConfig/send.php';
-$username = "";
-$email = "";
-$errors = [];
-
-include 'connection.php';
-
-// Regiser user
-if (isset($_POST['add-btn'])) {
-    if (empty($_POST['username'])) {
-        $errors['username'] = 'Username required';
-    }
-    if (empty($_POST['email'])) {
-        $errors['email'] = 'Email required';
-    }
-    if (empty($_POST['password'])) {
-        $errors['password'] = 'Password required';
-    }
-    if (isset($_POST['password']) && $_POST['password'] !== $_POST['passwordConf']) {
-        $errors['passwordConf'] = 'The two passwords do not match';
-    }
-
-    
-    $email = $_POST['email'];
-    $username = $_POST['username'];
-    $token = bin2hex(random_bytes(50)); // generate unique token
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); //encrypt password
-    $type = 'admin';
-
-    // Check if email already exists
-    $sql = "SELECT * FROM users WHERE email='$email' and type='$type' LIMIT 1";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        $errors['email'] = "Email already exists";
-    }
-
-    if (count($errors) === 0) {
-        $user_query = "INSERT INTO users SET username=?, email=?, token=?, password=?, type=?,verified=1";
-        $user_stmt = $conn->prepare($user_query);
-        $user_stmt->bind_param('sssss', $username, $email, $token, $password, $typ);
-        $user_result = $user_stmt->execute();
-
-        if ($user_result) {
-            $user_id = $user_stmt->insert_id;
-            $user_stmt->close();
-
-            header('location: admin.php');
-        } else {
-            $_SESSION['error_msg'] = "Database error: Could not register user";
-        }
-    }
-}
-
-
-
-                           ?>
                       </div>
                     </div>
                   </div>

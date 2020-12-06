@@ -1,4 +1,5 @@
 <?php 
+session_start();
 	include '../connection.php';
 if(isset($_POST['edit-btn']))
 {
@@ -23,6 +24,8 @@ if(isset($_POST['edit-btn']))
 	if($detail_result)
 	{
 		$detail_stmt->close();
+
+		$_SESSION['success_msg'] = 'Student detail has been updated successfully !';
 		header('location: ../students.php');
 	}
 	else
