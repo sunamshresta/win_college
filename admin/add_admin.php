@@ -134,14 +134,16 @@
 
           <?php 
 
-          	require 'connection.php';
+            require 'connection.php';
 
-	        $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
 
-	        $result=mysqli_query($conn,$query);
+          $result=mysqli_query($conn,$query);
+          $user= mysqli_fetch_assoc($result);
            ?>
+			
           
-           <section class="tables">   
+           <section class="edit">   
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-12">
@@ -153,40 +155,98 @@
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student List</h3>
+                      <h3 class="h4">Admin <em>[Add]</em></h3>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                        <table class="table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Full Name</th>
-                              <th>Username</th>
-                              <th>Status</th>
-                              <th>Action</th>	
-                            </tr>
-                          </thead>
-                          <tbody>
-                          	<?php 
-                          		$i=0; 
-                          		while ($user=mysqli_fetch_assoc($result)) { 
-                  			?>
-                          	
-                            <tr>
-                              <th scope="row"><?php echo ++$i; ?></th>
-                              <td><?php echo $user['firstname'].' '; echo $user['middlename'].' ';echo $user['lastname']; ?></td>
-                              <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
-                              <td>
-                              	<a class="fa fa-eye" href="detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                              	<a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="students/edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
-                              	<a class="fa fa-trash" href="delete.php?id='<?php echo($user["id"]) ?>"></a>
-                              </td>
-                            </tr>
-                          	<?php ; } ?>
-                          </tbody>
-                        </table>
+                         <form action="add_admin.php" method="post">
+                            <div class="form-group">
+                              <label>Username</label>
+                              <input type="text" name="username" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <label>Email</label>
+                              <input type="text" name="email" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <label>Password</label>
+                              <input type="password" name="password" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <label>Password Confirm</label>
+                              <input type="password" name="passwordConf" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <button type="submit" name="add-btn" class="btn btn-lg btn-block">Update</button>
+                            </div>
+                          </form>
+                          <?php 
+
+// include_once '../emailConfig/send.php';
+$username = "";
+$email = "";
+$errors = [];
+
+include 'connection.php';
+
+// Regiser user
+if (isset($_POST['add-btn'])) {
+    if (empty($_POST['username'])) {
+        $errors['username'] = 'Username required';
+    }
+    if (empty($_POST['email'])) {
+        $errors['email'] = 'Email required';
+    }
+    if (empty($_POST['password'])) {
+        $errors['password'] = 'Password required';
+    }
+    if (isset($_POST['password']) && $_POST['password'] !== $_POST['passwordConf']) {
+        $errors['passwordConf'] = 'The two passwords do not match';
+    }
+
+    
+    $email = $_POST['email'];
+    $username = $_POST['username'];
+    $token = bin2hex(random_bytes(50)); // generate unique token
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); //encrypt password
+    $type = 'admin';
+
+    // Check if email already exists
+    $sql = "SELECT * FROM users WHERE email='$email' and type='$type' LIMIT 1";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        $errors['email'] = "Email already exists";
+    }
+
+    if (count($errors) === 0) {
+        $user_query = "INSERT INTO users SET username=?, email=?, token=?, password=?, type=?,verified=1";
+        $user_stmt = $conn->prepare($user_query);
+        $user_stmt->bind_param('sssss', $username, $email, $token, $password, $typ);
+        $user_result = $user_stmt->execute();
+
+        if ($user_result) {
+            $user_id = $user_stmt->insert_id;
+            $user_stmt->close();
+
+            // sendVerificationEmail($email, $token);
+
+            $_SESSION['id'] = $user_id;
+            $_SESSION['username'] = $username;
+            $_SESSION['email'] = $email;
+            $_SESSION['verified'] = false;
+            $_SESSION['message'] = 'You are logged in!';
+            $_SESSION['type'] = 'alert-success';
+
+            header('location: admin.php');
+        } else {
+            $_SESSION['error_msg'] = "Database error: Could not register user";
+        }
+    }
+}
+
+
+
+                           ?>
                       </div>
                     </div>
                   </div>

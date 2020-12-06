@@ -159,54 +159,61 @@
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                         <form action="register.php" method="post">
-          <div class="form-group">
-            <label>First Name</label>
-            <input type="text" name="firstName" class="form-control form-control-lg" value="<?php echo $user['firstname']; ?>" >
-          </div>
-          <div class="form-group">
-            <label>Middle Name</label>
-            <input type="text" name="middleName" class="form-control form-control-lg" value="<?php echo $user['middlename']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" name="lastName" class="form-control form-control-lg" value="<?php echo $user['lastname']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Gender</label>
-            <input type="text" name="gender" value="male" class="form-control form-control-lg" value="<?php echo $user['gender']; ?>">
-            <!-- Male -->
-            <!-- <input type="radio" name="gender" value="female" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Female -->
-            <!-- <input type="radio" name="gender" value="other" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Other -->
-          </div>
-          <div class="form-group">
-            <label>DOB</label>
-            <input type="date" name="dob" class="form-control form-control-lg" value="<?php echo $user['dob']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Permanent Address</label>
-            <input type="text" name="permanentAddress" class="form-control form-control-lg" value="<?php echo $user['address1']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Temporary Address</label>
-            <input type="text" name="temporaryAddress" class="form-control form-control-lg" value="<?php echo $user['address2']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="text" name="email" class="form-control form-control-lg" value="<?php echo $user['email']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Mobile Number</label>
-            <input type="text" name="mobile" class="form-control form-control-lg" value="<?php echo $user['mobile']; ?>">
-          </div>
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" class="form-control form-control-lg" value="<?php echo $user['username']; ?>">
-          </div>
-          <div class="form-group">
-            <button type="submit" name="register-btn" class="btn btn-lg btn-block">Sign Up</button>
-          </div>
-        </form>
+                         <form action="edit_action.php" method="post">
+                            <div class="form-group">
+                              <label>First Name</label>
+                              <input type="text" name="firstName" class="form-control form-control-lg" value="<?php echo $user['firstname']; ?>" >
+                            </div>
+                            <div class="form-group">
+                              <label>Middle Name</label>
+                              <input type="text" name="middleName" class="form-control form-control-lg" value="<?php echo $user['middlename']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Last Name</label>
+                              <input type="text" name="lastName" class="form-control form-control-lg" value="<?php echo $user['lastname']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Gender</label>
+                              <input type="text" name="gender" value="male" class="form-control form-control-lg" value="<?php echo $user['gender']; ?>">
+                              <!-- Male -->
+                              <!-- <input type="radio" name="gender" value="female" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Female -->
+                              <!-- <input type="radio" name="gender" value="other" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Other -->
+                            </div>
+                            <div class="form-group">
+                              <label>DOB</label>
+                              <input type="date" name="dob" class="form-control form-control-lg" value="<?php echo $user['dob']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Permanent Address</label>
+                              <input type="text" name="permanentAddress" class="form-control form-control-lg" value="<?php echo $user['address1']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Temporary Address</label>
+                              <input type="text" name="temporaryAddress" class="form-control form-control-lg" value="<?php echo $user['address2']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Email</label>
+                              <input type="text" name="email" class="form-control form-control-lg" value="<?php echo $user['email']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Mobile Number</label>
+                              <input type="text" name="mobile" class="form-control form-control-lg" value="<?php echo $user['mobile']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Username</label>
+                              <input type="text" name="username" class="form-control form-control-lg disabled" disabled="disabled" value="<?php echo $user['username']; ?>">
+                            </div>
+
+                            <input type="hidden" name="id" value="<?php echo $userId; ?>">
+                            <div class="form-group">
+                              <button type="submit" name="edit-btn" class="btn btn-lg btn-block">Update</button>
+                            </div>
+                          </form>
+                          <?php 
+
+                          
+
+                           ?>
                       </div>
                     </div>
                   </div>

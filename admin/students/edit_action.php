@@ -1,20 +1,37 @@
 <?php 
+	include '../connection.php';
 if(isset($_POST['edit-btn']))
 {
-	include '../conection.php';
-	$id=$_POST['id'];
-	$title=$_POST['subject'];
-	$post=$_POST['message'];
+	$id=intval($_POST['id']);
+	$firstName = $_POST['firstName'];
+    $middleName = $_POST['middleName'];
+    $lastName = $_POST['lastName'];
+    $dob = $_POST['dob'];
+    $gender = $_POST['gender'];
+    $address1 = $_POST['permanentAddress'];
+    $address2 = $_POST['temporaryAddress'];
+    $email = $_POST['email'];
+    $mobile = $_POST['mobile'];
+    $type = 'student';
+    echo $id;
 
-	$query="UPDATE table_2 set subject='$title',message='$post' where id='$id'";
-	$result=mysqli_query($con,$query);
-	if($result)
+	$detatil_query="UPDATE student_details set first_name=?', middle_name=?', last_name=?', gender=?', dob=?', address1=?', address2=?', email=?', mobile=?' where id='$id';";
+	$detail_query = "INSERT INTO student_details SET first_name=?,middle_name=?,last_name=?,dob=?,gender=?,address1=?,address2=?,email=?,mobile=?";
+        $detail_stmt = $conn->prepare($detail_query);
+        $detail_stmt->bind_param('sssssssss', $firstName, $middleName, $lastName, $dob, $gender, $address1,$address2,$email,$mobile);
+        $detail_result = $detail_stmt->execute();
+
+	// $result=mysqli_query($conn,$query);
+	// dump($result);exit;
+	if($detail_result)
 	{
-		echo "Data updated";
+		$detail_stmt->close();
+		header('location: ../students.php');
 	}
 	else
 	{
-		echo "Error updating";
+		header('location: ../students/edit.php?id='.$id);
 	}
+	
  
 }
