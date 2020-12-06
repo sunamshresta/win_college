@@ -9,17 +9,17 @@
     <meta name="robots" content="all,follow">
 
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
     <!-- Fontastic Custom icon font-->
-    <link rel="stylesheet" href="assets/css/fontastic.css">
+    <link rel="stylesheet" href="../assets/css/fontastic.css">
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="assets/css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
     <!-- Favicon-->
     <!-- <link rel="shortcut icon" href="img/favicon.ico"> -->
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -99,7 +99,7 @@
                   </ul>
                 </li>
                 <!-- Logout    -->
-                <li class="nav-item"><a href="login.html" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
+                <li class="nav-item"><a href="../logout.php" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
               </ul>
             </div>
           </div>
@@ -134,14 +134,16 @@
 
           <?php 
 
-          	require 'connection.php';
+            require '../connection.php';
+            $userId = $_GET['id'];
 
-  	        $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
 
-  	        $result=mysqli_query($conn,$query)
+          $result=mysqli_query($conn,$query);
+          $user= mysqli_fetch_assoc($result);
            ?>
           
-           <section class="tables">   
+           <section class="edit">   
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-12">
@@ -153,40 +155,58 @@
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student List</h3>
+                      <h3 class="h4">Student <em>[Update]</em></h3>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                        <table class="table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Full Name</th>
-                              <th>Username</th>
-                              <th>Status</th>
-                              <th>Action</th>	
-                            </tr>
-                          </thead>
-                          <tbody>
-                          	<?php 
-                          		$i=0; 
-                          		while ($user=mysqli_fetch_assoc($result)) { 
-                  			?>
-                          	
-                            <tr>
-                              <th scope="row"><?php echo ++$i; ?></th>
-                              <td><?php echo $user['firstname']; echo $user['middlename'];echo $user['lastname']; ?></td>
-                              <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
-                              <td>
-                              	<a class="fa fa-eye" href="detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                              	<a class="fa fa-edit" href="edit.php?id='<?php echo $user["id"]; ?>'"> </a>
-                              	<a class="fa fa-trash" href="delete.php?id='<?php echo($user["id"]) ?>"></a>
-                              </td>
-                            </tr>
-                          	<?php ; } ?>
-                          </tbody>
-                        </table>
+                         <form action="register.php" method="post">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="firstName" class="form-control form-control-lg" value="<?php echo $user['firstname']; ?>" >
+          </div>
+          <div class="form-group">
+            <label>Middle Name</label>
+            <input type="text" name="middleName" class="form-control form-control-lg" value="<?php echo $user['middlename']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="lastName" class="form-control form-control-lg" value="<?php echo $user['lastname']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <input type="text" name="gender" value="male" class="form-control form-control-lg" value="<?php echo $user['gender']; ?>">
+            <!-- Male -->
+            <!-- <input type="radio" name="gender" value="female" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Female -->
+            <!-- <input type="radio" name="gender" value="other" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Other -->
+          </div>
+          <div class="form-group">
+            <label>DOB</label>
+            <input type="date" name="dob" class="form-control form-control-lg" value="<?php echo $user['dob']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Permanent Address</label>
+            <input type="text" name="permanentAddress" class="form-control form-control-lg" value="<?php echo $user['address1']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Temporary Address</label>
+            <input type="text" name="temporaryAddress" class="form-control form-control-lg" value="<?php echo $user['address2']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" name="email" class="form-control form-control-lg" value="<?php echo $user['email']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="text" name="mobile" class="form-control form-control-lg" value="<?php echo $user['mobile']; ?>">
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control form-control-lg" value="<?php echo $user['username']; ?>">
+          </div>
+          <div class="form-group">
+            <button type="submit" name="register-btn" class="btn btn-lg btn-block">Sign Up</button>
+          </div>
+        </form>
                       </div>
                     </div>
                   </div>
@@ -211,14 +231,14 @@
       </div>
     </div>
     <!-- JavaScript files-->
-    <script src="assets/vendor/jquery/jquery.min.js"></script>
-    <script src="assets/vendor/popper.js/umd/popper.min.js"> </script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/jquery.cookie/jquery.cookie.js"> </script>
-    <!-- <script src="assets/chart.js/Chart.min.js"></script> -->
-    <script src="assets/jquery-validation/jquery.validate.min.js"></script>
-    <!-- <script src="assets/js/charts-home.js"></script> -->
+    <script src="../assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../assets/vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../assets/jquery.cookie/jquery.cookie.js"> </script>
+    <!-- <script src="../assets/chart.js/Chart.min.js"></script> -->
+    <script src="../assets/jquery-validation/jquery.validate.min.js"></script>
+    <!-- <script src="../assets/js/charts-home.js"></script> -->
     <!-- Main File-->
-    <script src="assets/js/front.js"></script>
+    <script src="../assets/js/front.js"></script>
   </body>
 </html>

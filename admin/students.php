@@ -138,7 +138,7 @@
 
 	        $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
 
-	        $result=mysqli_query($conn,$query)
+	        $result=mysqli_query($conn,$query);
            ?>
           
            <section class="tables">   
@@ -180,7 +180,7 @@
                               <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
                               <td>
                               	<a class="fa fa-eye" href="detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                              	<a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="edit.php?id='<?php echo $user["id"]; ?>'"> </a>
+                              	<a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="students/edit.php?id='<?php echo $user["id"]; ?>'"> </a>
                               	<a class="fa fa-trash" href="delete.php?id='<?php echo($user["id"]) ?>"></a>
                               </td>
                             </tr>

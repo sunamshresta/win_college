@@ -1,0 +1,2 @@
+-create database: win_college
+-import .sql file
