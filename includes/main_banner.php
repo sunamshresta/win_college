@@ -11,7 +11,7 @@
                   <div class="scroll-to-section">
                     <a href="#section2">Discover more</a>
                     <a href="sigin.php" onclick="signin();">Login</a>
-                    <a href="#section3">Register</a>
+                    <a href="register.php" onclick="register();">Register</a>
                   </div>
 
               </div>

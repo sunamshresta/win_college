@@ -1,3 +1,6 @@
+<?php 
+  $page='admin';
+ ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,7 +24,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="assets/css/custom.css">
     <!-- Favicon-->
-    <!-- <link rel="shortcut icon" href="img/favicon.ico"> -->
+    <link rel="shortcut icon" href="../favicon.png">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -42,7 +45,7 @@
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <!-- Navbar Header-->
               <div class="navbar-header">
-                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                <!-- Navbar Brand --><a href="index.php" class="navbar-brand d-none d-sm-inline-block">
                   <div class="brand-text d-none d-lg-inline-block"><span>WIN </span><strong> Dashboard</strong></div>
                   <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
                 <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
@@ -118,8 +121,8 @@
           </div>
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
-            <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li>
-            <li class="active"><a href="student.php"> <i class="fa fa-users"></i>Student </a></li>
+            <li class="<?php if($page=='about'){ echo 'active'; } ?>"><a href="admin.php"> <i class="icon-user"></i>Admin </a></li>
+            <li class=""><a href="students.php"> <i class="fa fa-users"></i>Student </a></li>
             <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li>
             
           </ul>
@@ -227,15 +230,6 @@ if (isset($_POST['add-btn'])) {
         if ($user_result) {
             $user_id = $user_stmt->insert_id;
             $user_stmt->close();
-
-            // sendVerificationEmail($email, $token);
-
-            $_SESSION['id'] = $user_id;
-            $_SESSION['username'] = $username;
-            $_SESSION['email'] = $email;
-            $_SESSION['verified'] = false;
-            $_SESSION['message'] = 'You are logged in!';
-            $_SESSION['type'] = 'alert-success';
 
             header('location: admin.php');
         } else {

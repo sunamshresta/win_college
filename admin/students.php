@@ -1,3 +1,11 @@
+<?php 
+  $page='student';
+  session_start();
+  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
+    session_destroy();
+    header('location: ../login.php');
+  }
+ ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,7 +29,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="assets/css/custom.css">
     <!-- Favicon-->
-    <!-- <link rel="shortcut icon" href="img/favicon.ico"> -->
+    <link rel="shortcut icon" href="../favicon.png">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -42,7 +50,7 @@
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <!-- Navbar Header-->
               <div class="navbar-header">
-                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                <!-- Navbar Brand --><a href="index.php" class="navbar-brand d-none d-sm-inline-block">
                   <div class="brand-text d-none d-lg-inline-block"><span>WIN </span><strong> Dashboard</strong></div>
                   <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
                 <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
@@ -118,8 +126,8 @@
           </div>
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
-            <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li>
-            <li class="active"><a href="student.php"> <i class="fa fa-users"></i>Student </a></li>
+            <li class=""><a href="admin.php"> <i class="icon-user"></i>Admin </a></li>
+            <li class="<?php if($page=='student'){ echo 'active'; } ?>"><a href="students.php"> <i class="fa fa-users"></i>Student </a></li>
             <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li>
             
           </ul>
@@ -181,7 +189,7 @@
                               <td>
                               	<a class="fa fa-eye" href="detail.php?id='<?php echo $user["id"]; ?>'"> </a>
                               	<a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="students/edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
-                              	<a class="fa fa-trash" href="delete.php?id='<?php echo($user["id"]) ?>"></a>
+                              	<a class="fa fa-trash" href="delete.php?id=<?php echo $user['id']; ?>" onclick="return confirm('Are u sure ! ')"></a>
                               </td>
                             </tr>
                           	<?php ; } ?>

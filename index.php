@@ -280,6 +280,10 @@
       function signin(){
         window.location.href = 'login.php';
       }
+
+      function register(){
+        window.location.href = 'register.php';
+      }
     </script>
 	
 </body>
