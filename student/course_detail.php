@@ -1,18 +1,22 @@
 <?php 
-$page = 'student';
+$page='course';
 session_start();
+// redirect user to login page if they're not logged in
 if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 'student')) {
     session_destroy();
     header('location: ../login.php');
 }
- ?>
+  // include '../emailConfig/auth.php';
+
+?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WIN College | Student-Portal </title>
-    <link rel="shortcut icon" href="../favicon.png">    <meta name="description" content="">
+    <title>WIN College | Student-Portal | Courses</title>
+    <link rel="shortcut icon" href="../favicon.png">
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
 
@@ -127,8 +131,8 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
             <!-- <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li> -->
-            <li class="active"><a href="index.php"> <i class="fa fa-users"></i>Student </a></li>
-            <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li>
+            <li class="<?php if($page=='student'){ echo 'active'; } ?>"><a href="index.php"> <i class="fa fa-users"></i>Student </a></li>
+            <li class="<?php if($page=='course'){ echo 'active'; } ?>"><a href="course.php"> <i class="fa fa-book"></i>Courses </a></li>
             
           </ul>
         </nav>
@@ -139,16 +143,14 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
               <h2 class="no-margin-bottom">Dashboard</h2>
             </div>
           </header>
+         <?php
+         include '../admin/connection.php';
+         $courseId = $_GET['id'];
 
-          <?php 
+          $query = "SELECT c.* FROM courses as c WHERE c.Course_ID=$courseId";
 
-            require '../admin/connection.php';
-            $userId = $_GET['id'];
-
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT JOIN student_details as d ON u.student_detail=d.id WHERE u.type='student' AND u.student_detail =$userId";
-
-          $result=mysqli_query($conn, $query);
-          $user= mysqli_fetch_assoc($result);
+          $result=mysqli_query($conn,$query);
+          $course= mysqli_fetch_assoc($result);
           
            ?>
           
@@ -162,81 +164,64 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                         <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                         <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
                           <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a>
-                          <a href="edit.php?id='<?php echo $user["detailId"]; ?>'" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a>
-                         </div>
+                          <a href="admin_edit.php?id='<?php echo $course["id"]; ?>'" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a>
+                        </div>
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student <em>[Update]</em></h3>
+                      <h3 class="h4">Course <em>[Detail]</em></h3>
                     </div>
                     <div class="card-body">
-                      <div class="table-responsive">                       
-                         <form action="edit_action.php" method="post">
-                            <div class="form-group">
-                              <label>First Name</label>
-                              <input type="text" name="firstName" class="form-control form-control-lg" value="<?php echo $user['firstname']; ?>" >
-                            </div>
-                            <div class="form-group">
-                              <label>Middle Name</label>
-                              <input type="text" name="middleName" class="form-control form-control-lg" value="<?php echo $user['middlename']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Last Name</label>
-                              <input type="text" name="lastName" class="form-control form-control-lg" value="<?php echo $user['lastname']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Gender</label>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="gender" value="male" required <?php echo ($user['gender']==='male') ? 'checked' : ''; ?>>Male
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="gender" value="female" required <?php echo ($user['gender']==='female') ? 'checked' : ''; ?>>Female
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="gender" value="other" required <?php echo ($user['gender']==='other') ? 'checked' : ''; ?>>Other
-                                </label>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label>DOB</label>
-                              <input type="date" name="dob" class="form-control form-control-lg" value="<?php echo $user['dob']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Permanent Address</label>
-                              <input type="text" name="permanentAddress" class="form-control form-control-lg" value="<?php echo $user['address1']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Temporary Address</label>
-                              <input type="text" name="temporaryAddress" class="form-control form-control-lg" value="<?php echo $user['address2']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Email</label>
-                              <input type="text" name="email" class="form-control form-control-lg" value="<?php echo $user['email']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Mobile Number</label>
-                              <input type="text" name="mobile" class="form-control form-control-lg" value="<?php echo $user['mobile']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Username</label>
-                              <input type="text" name="username" class="form-control form-control-lg disabled" disabled="disabled" value="<?php echo $user['username']; ?>">
-                            </div>
+                      <div class="row">
+                        <div class="col-md-6 offset-3">
+                          <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>Course Name</strong>
+                              <span class=""><?php echo $course['Course_Name']; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>VET Qual</strong>
+                              <span class=""><?php echo $course['VET_Qual']; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>Cricos Qual</strong>
+                              <span class=""><?php echo $course['Cricos_Qual']; ?></span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                          <div class="table-responsive">                       
+                            <table class="table table-striped table-hover">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Subject Name</th>
+                                  <th>Code</th>
+                                  <th>Term</th> 
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php 
+                                $query = "SELECT s.* FROM subjects as s WHERE s.Course_ID=$courseId";
 
-                            <input type="hidden" name="id" value="<?php echo $user['detailId']; ?>">
-                            <div class="form-group">
-                              <button type="submit" name="edit-btn" class="btn btn-lg btn-block btn-primary">Update</button>
-                            </div>
-                          </form>
-                          <?php 
+                                  $result=mysqli_query($conn,$query);
+                                  // $course= mysqli_fetch_assoc($result);
+                                  $i=0; 
+                                  while ($subject=mysqli_fetch_assoc($result)) { 
+                            ?>
+                                
+                                <tr>
+                                  <th scope="row"><?php echo ++$i; ?></th>
+                                  <td><?php echo $subject['UOC_Name']; ?></td>
+                                  <td><?php echo $subject['UOC_Code']; ?></td>
+                                  <td><?php echo $subject['Term']; ?></td>
+                                </tr>
+                                <?php ; } ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
 
-                          
-
-                           ?>
                       </div>
                     </div>
                   </div>
@@ -244,6 +229,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
               </div>
             </div>
           </section>
+
           <!-- Page Footer-->
           <footer class="main-footer no-padding-top">
             <div class="container-fluid">

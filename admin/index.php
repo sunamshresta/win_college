@@ -62,19 +62,18 @@
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
                     <div class="icon bg-violet"><i class="icon-user"></i></div>
+                    <?php
+                        $new_student_query =  "SELECT * FROM users where type='student' and verified=false"; 
+                        $new_student = mysqli_query($conn, $new_student_query);
+                        $new_student_count = mysqli_num_rows($new_student);
+                       ?>
                     <div class="title"><span>New<br>Students</span>
                       <div class="progress">
-                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="<?php echo $new_student_count; ?>" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
                       </div>
                     </div>
                     <div class="number">
-                      <?php
-
-                        $new_student_query =  "SELECT * FROM users where type='student' and verified=false"; 
-                        $new_student = mysqli_query($conn, $new_student_query);
-
-                       ?>
-                      <strong><?php echo mysqli_num_rows($new_student); ?></strong>
+                      <strong><?php echo $new_student_count; ?></strong>
                     </div>
                   </div>
                 </div>
@@ -82,39 +81,47 @@
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
                     <div class="icon bg-red"><i class="icon-padnote"></i></div>
-                    <div class="title"><span>Active<br>Students</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
-                      </div>
-                    </div>
-                    <div class="number">
                       <?php
 
                         $active_student_query =  "SELECT * FROM users where type='student' and verified=true"; 
                         $active_student = mysqli_query($conn, $active_student_query);
+                        $active_student_count = mysqli_num_rows($active_student);
 
                        ?>
-                      <strong><?php echo mysqli_num_rows($active_student); ?></strong>
+                    <div class="title"><span>Active<br>Students</span>
+                      <div class="progress">
+                        <div role="progressbar" style="width: 4%; height: 4px;" aria-valuenow="<?php echo $active_student_count; ?>" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
+                      </div>
+                    </div>
+                    <div class="number">
+                      <strong><?php echo $active_student_count; ?></strong>
                     </div>
                   </div>
                 </div>
                 <!-- Item -->
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
-                    <div class="icon bg-green"><i class="icon-bill"></i></div>
-                    <div class="title"><span>New<br>Course</span>
+                    <div class="icon bg-green"><i class="fa fa-book"></i></div>
+                      <?php
+
+                        $course_query =  "SELECT * FROM courses"; 
+                        $courses = mysqli_query($conn, $course_query);
+                        $courses_count = mysqli_num_rows($courses);
+
+                       ?>
+                    <div class="title"><span>Total<br>Course</span>
                       <div class="progress">
-                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
+                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
                       </div>
                     </div>
-                    <div class="number"><strong>40</strong></div>
+                    <div class="number"><strong><?php echo $courses_count; ?></strong></div>
                   </div>
                 </div>
                 <!-- Item -->
                 <div class="col-xl-3 col-sm-6">
                   <div class="item d-flex align-items-center">
                     <div class="icon bg-orange"><i class="icon-check"></i></div>
-                    <div class="title"><span><br>Admin</span>
+                    <div class="title"><span>Total<br>Admin</span>
                       <div class="progress">
                         <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
                       </div>

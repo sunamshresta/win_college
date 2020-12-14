@@ -1,10 +1,6 @@
 <?php 
-  $page='admin';
   session_start();
-  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
-    session_destroy();
-    header('location: ../login.php');
-  }
+  $page='course';
  ?>
 <!DOCTYPE html>
 <html>
@@ -45,68 +41,90 @@
           <!-- Page Header-->
           <header class="page-header">
             <div class="container-fluid">
-              <h2 class="no-margin-bottom">Admin</h2>
+              <h2 class="no-margin-bottom">Course</h2>
             </div>
           </header>
-          <?php
-          require '../includes/success.php';
-          require '../includes/error.php';
-          require 'connection.php';
 
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified FROM users as u  WHERE u.type='admin' and deleted=false";
+          <?php
+          include '../includes/error.php';
+          require 'connection.php';
+          $courseId = $_GET['id'];
+
+          $query = "SELECT c.* FROM courses as c WHERE c.Course_ID=$courseId";
 
           $result=mysqli_query($conn,$query);
+          $course= mysqli_fetch_assoc($result);
+          
            ?>
           
-           <section class="tables">   
+           <section class="edit">   
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-close">
                       <div class="dropdown">
-
                         <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                         <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
                           <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a>
+                          <a href="admin_edit.php?id='<?php echo $course["id"]; ?>'" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a>
                         </div>
-                        <a class="btn btn-primary btn-sm fa fa-add pull-left mt-0 mb-2" href="admin_add.php"> Add</a>
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Admin List</h3>
-                      
+                      <h3 class="h4">Course <em>[Detail]</em></h3>
                     </div>
                     <div class="card-body">
-                      <div class="table-responsive">                       
-                        <table class="table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Username</th>
-                              <th>Status</th>
-                              <th>Action</th> 
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php 
-                              $i=0; 
-                              while ($user=mysqli_fetch_assoc($result)) { 
-                        ?>
-                            
-                            <tr>
-                              <th scope="row"><?php echo ++$i; ?></th>
-                              <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'Active' : 'Pending'; ?></td>
-                              <td>
-                                <a class="fa fa-eye btn btn-secondary" href="admin_detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                                <a class="fa fa-edit btn btn-primary" href="admin_edit.php?id='<?php echo $user["id"]; ?>'"></a>
-                                <a class="fa fa-trash btn btn-danger" href="admin_delete.php?id='<?php echo($user["id"]) ?>'" onclick="return confirm('Do you want to delete?')"></a>
-                              </td>
-                            </tr>
-                            <?php ; } ?>
-                          </tbody>
-                        </table>
+                      <div class="row">
+                        <div class="col-md-6 offset-3">
+                          <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>Course Name</strong>
+                              <span class=""><?php echo $course['Course_Name']; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>VET Qual</strong>
+                              <span class=""><?php echo $course['VET_Qual']; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>Cricos Qual</strong>
+                              <span class=""><?php echo $course['Cricos_Qual']; ?></span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                          <div class="table-responsive">                       
+                            <table class="table table-striped table-hover">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Subject Name</th>
+                                  <th>Code</th>
+                                  <th>Term</th> 
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php 
+                                $query = "SELECT s.* FROM subjects as s WHERE s.Course_ID=$courseId";
+
+                                  $result=mysqli_query($conn,$query);
+                                  // $course= mysqli_fetch_assoc($result);
+                                  $i=0; 
+                                  while ($subject=mysqli_fetch_assoc($result)) { 
+                            ?>
+                                
+                                <tr>
+                                  <th scope="row"><?php echo ++$i; ?></th>
+                                  <td><?php echo $subject['UOC_Name']; ?></td>
+                                  <td><?php echo $subject['UOC_Code']; ?></td>
+                                  <td><?php echo $subject['Term']; ?></td>
+                                </tr>
+                                <?php ; } ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>

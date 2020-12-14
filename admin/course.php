@@ -1,5 +1,5 @@
 <?php 
-  $page='admin';
+  $page='course';
   session_start();
   if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
     session_destroy();
@@ -11,7 +11,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WIN College | Admin</title>
+    <title>WIN College | Course</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
@@ -45,7 +45,7 @@
           <!-- Page Header-->
           <header class="page-header">
             <div class="container-fluid">
-              <h2 class="no-margin-bottom">Admin</h2>
+              <h2 class="no-margin-bottom">Course</h2>
             </div>
           </header>
           <?php
@@ -53,7 +53,7 @@
           require '../includes/error.php';
           require 'connection.php';
 
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified FROM users as u  WHERE u.type='admin' and deleted=false";
+          $query = "SELECT * FROM courses";
 
           $result=mysqli_query($conn,$query);
            ?>
@@ -69,12 +69,12 @@
                         <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
                         <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
                           <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a>
+                          <a href="#" class="dropdown-item add"> <i class="fa fa-plus"></i>Add </a>
                         </div>
-                        <a class="btn btn-primary btn-sm fa fa-add pull-left mt-0 mb-2" href="admin_add.php"> Add</a>
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Admin List</h3>
+                      <h3 class="h4">List of Courses</h3>
                       
                     </div>
                     <div class="card-body">
@@ -83,25 +83,30 @@
                           <thead>
                             <tr>
                               <th>#</th>
-                              <th>Username</th>
-                              <th>Status</th>
-                              <th>Action</th> 
+                              <th>Name</th>
+                              <th>VET Qual</th>
+                              <th>Cricos Qual</th>
+                              <th>Duration</th>
+                              <th>Year</th> 
                             </tr>
                           </thead>
                           <tbody>
                             <?php 
                               $i=0; 
-                              while ($user=mysqli_fetch_assoc($result)) { 
+                              while ($course=mysqli_fetch_assoc($result)) { 
                         ?>
                             
                             <tr>
                               <th scope="row"><?php echo ++$i; ?></th>
-                              <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'Active' : 'Pending'; ?></td>
+                              <td><?php echo $course['Course_Name']; ?></td>
+                              <td><?php echo $course['VET_Qual']; ?></td>
+                              <td><?php echo $course['Cricos_Qual']; ?></td>
+                              <td><?php echo $course['Course_Duration']; ?></td>
+                              <td><?php echo $course['Year']; ?></td>
                               <td>
-                                <a class="fa fa-eye btn btn-secondary" href="admin_detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                                <a class="fa fa-edit btn btn-primary" href="admin_edit.php?id='<?php echo $user["id"]; ?>'"></a>
-                                <a class="fa fa-trash btn btn-danger" href="admin_delete.php?id='<?php echo($user["id"]) ?>'" onclick="return confirm('Do you want to delete?')"></a>
+                                <a class="fa fa-eye" href="course_detail.php?id='<?php echo $course["Course_ID"]; ?>'"> </a>
+                                <!-- <a class="fa fa-edit btn btn-primary" href="admin_edit.php?id='<?php echo $course["id"]; ?>'"></a>
+                                <a class="fa fa-trash btn btn-danger" href="admin_delete.php?id='<?php echo($course["id"]) ?>'" onclick="return confirm('Do you want to delete?')"></a> -->
                               </td>
                             </tr>
                             <?php ; } ?>
