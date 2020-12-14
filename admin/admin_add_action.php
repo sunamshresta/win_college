@@ -43,7 +43,7 @@ if (isset($_POST['add-btn'])) {
             exit(0);
         } else {
             $_SESSION['error_msg'] = "Database error: Could not register user";
-            header('location: add_admin.php');
+            header('location: admin_add.php');
         }
     }
 }

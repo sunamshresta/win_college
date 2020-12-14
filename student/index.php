@@ -190,13 +190,13 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                               $result=mysqli_query($conn,$query);
                               $i=0; 
                               while ($user=mysqli_fetch_assoc($result)) { 
-                                echo "<pre>";
-          echo $id."<br>";
-          print_r($result);
-          print_r('user');
-          print_r($user);
-          echo "</pre>";
-          echo $user['detailId'];
+                                // echo "<pre>";
+                                // echo $id."<br>";
+                                // print_r($result);
+                                // print_r('user');
+                                // print_r($user);
+                                // echo "</pre>";
+                                // echo $user['detailId'];
                         ?>
                             
                             <tr>

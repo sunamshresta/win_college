@@ -142,18 +142,13 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
           <?php 
 
             require '../admin/connection.php';
-            $userId = intval($_GET['id']);
-            echo $userId;
+            $userId = $_GET['id'];
 
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT JOIN student_details as d ON u.student_detail=d.id WHERE u.type='student' AND u.student_detail ='$userId'";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT JOIN student_details as d ON u.student_detail=d.id WHERE u.type='student' AND u.student_detail =$userId";
 
           $result=mysqli_query($conn, $query);
           $user= mysqli_fetch_assoc($result);
-          echo "<pre>";
-          echo $userId."<br>";
-          print_r($result);
-          print_r($user);
-          echo "</pre>";
+          
            ?>
           
            <section class="edit">   
@@ -164,7 +159,10 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                     <div class="card-close">
                       <div class="dropdown">
                         <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
+                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
+                          <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a>
+                          <a href="edit.php?id='<?php echo $user["detailId"]; ?>'" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a>
+                         </div>
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
@@ -187,10 +185,21 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
                             </div>
                             <div class="form-group">
                               <label>Gender</label>
-                              <input type="text" name="gender" value="male" class="form-control form-control-lg" value="<?php echo $user['gender']; ?>">
-                              <!-- Male -->
-                              <!-- <input type="radio" name="gender" value="female" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Female -->
-                              <!-- <input type="radio" name="gender" value="other" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Other -->
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="gender" value="male" required <?php echo ($user['gender']==='male') ? 'checked' : ''; ?>>Male
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="gender" value="female" required <?php echo ($user['gender']==='female') ? 'checked' : ''; ?>>Female
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="gender" value="other" required <?php echo ($user['gender']==='other') ? 'checked' : ''; ?>>Other
+                                </label>
+                              </div>
                             </div>
                             <div class="form-group">
                               <label>DOB</label>
@@ -219,7 +228,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
 
                             <input type="hidden" name="id" value="<?php echo $user['detailId']; ?>">
                             <div class="form-group">
-                              <button type="submit" name="edit-btn" class="btn btn-lg btn-block">Update</button>
+                              <button type="submit" name="edit-btn" class="btn btn-lg btn-block btn-primary">Update</button>
                             </div>
                           </form>
                           <?php 

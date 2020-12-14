@@ -13,17 +13,17 @@
     <meta name="robots" content="all,follow">
 
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
     <!-- Fontastic Custom icon font-->
-    <link rel="stylesheet" href="../assets/css/fontastic.css">
+    <link rel="stylesheet" href="assets/css/fontastic.css">
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="../favicon.png">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -33,10 +33,10 @@
   <body>
     <div class="page">
       <!-- Main Navbar-->
-      <?php require '../includes/header.php'; ?>
+      <?php require 'includes/header.php'; ?>
       <div class="page-content d-flex align-items-stretch"> 
         <!-- Side Navbar -->
-        <?php require '../includes/sidebar.php'; ?>
+        <?php require 'includes/sidebar.php'; ?>
         <div class="content-inner">
           <!-- Page Header-->
           <header class="page-header">
@@ -46,8 +46,8 @@
           </header>
 
           <?php
-          include '../../includes/error.php';
-          require '../connection.php';
+          include '../includes/error.php';
+          require 'connection.php';
           $userId = $_GET['id'];
 
           $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
@@ -64,7 +64,9 @@
                     <div class="card-close">
                       <div class="dropdown">
                         <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
+                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
+                          <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a>
+                        </div>
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
@@ -72,7 +74,7 @@
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                         <form action="edit_action.php" method="post">
+                         <form action="student_edit_action.php" method="post">
                             <div class="form-group">
                               <label>First Name</label>
                               <input type="text" name="firstName" class="form-control form-control-lg" value="<?php echo $user['firstname']; ?>" >
@@ -87,10 +89,21 @@
                             </div>
                             <div class="form-group">
                               <label>Gender</label>
-                              <input type="text" name="gender" value="male" class="form-control form-control-lg" value="<?php echo $user['gender']; ?>">
-                              <!-- Male -->
-                              <!-- <input type="radio" name="gender" value="female" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Female -->
-                              <!-- <input type="radio" name="gender" value="other" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Other -->
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="gender" value="male" required <?php echo ($user['gender']=='male') ? 'checked' : ''; ?>>Male
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="gender" value="female" required <?php echo ($user['gender']=='female') ? 'checked' : ''; ?>>Female
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="gender" value="other" required <?php echo ($user['gender']=='other') ? 'checked' : ''; ?>>Other
+                                </label>
+                              </div>
                             </div>
                             <div class="form-group">
                               <label>DOB</label>
@@ -135,30 +148,19 @@
             </div>
           </section>
           <!-- Page Footer-->
-          <footer class="main-footer no-padding-top">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-sm-6">
-                  <p>WIN College &copy; 2020</p>
-                </div>
-                <div class="col-sm-6 text-right">
-                  <p>Design by <a href="#" class="external">WIN College</a></p>
-                </div>
-              </div>
-            </div>
-          </footer>
+          <?php require 'includes/footer.php'; ?>
         </div>
       </div>
     </div>
     <!-- JavaScript files-->
-    <script src="../assets/vendor/jquery/jquery.min.js"></script>
-    <script src="../assets/vendor/popper.js/umd/popper.min.js"> </script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../assets/jquery.cookie/jquery.cookie.js"> </script>
-    <!-- <script src="../assets/chart.js/Chart.min.js"></script> -->
-    <script src="../assets/jquery-validation/jquery.validate.min.js"></script>
-    <!-- <script src="../assets/js/charts-home.js"></script> -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.cookie/jquery.cookie.js"> </script>
+    <!-- <script src="assets/chart.js/Chart.min.js"></script> -->
+    <script src="assets/jquery-validation/jquery.validate.min.js"></script>
+    <!-- <script src="assets/js/charts-home.js"></script> -->
     <!-- Main File-->
-    <script src="../assets/js/front.js"></script>
+    <script src="assets/js/front.js"></script>
   </body>
 </html>

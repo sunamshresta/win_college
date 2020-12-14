@@ -21,11 +21,12 @@ include 'emailConfig/auth_login.php';
       <div class="col-md-4 offset-md-4 form-wrapper auth login">
         <h3 class="text-center form-title">Login</h3>
         <?php 
-        if (!empty($_SESSION['error_message'])) {
-          $errors = [$_SESSION['error_message']];
+        if (!empty($_SESSION['error_msg'])) {
+          $errors += ['login_fail' => $_SESSION['error_msg'] ];
+          // array_push($errors, $_SESSION['error_msg']);
         }
         
-        if (count($errors) > 0 AND !empty($_SESSION['error_message'])): ?>
+        if (count($errors) > 0 OR !empty($_SESSION['error_msg'])): ?>
           <div class="alert alert-danger">
             <?php foreach ($errors as $error): ?>
             <li>
@@ -34,7 +35,7 @@ include 'emailConfig/auth_login.php';
             <?php endforeach;?>
           </div>
         <?php endif;?>
-        <?php unset($_SESSION['error_message']); ?>
+        <?php unset($_SESSION['error_msg']); ?>
 
         <?php if (!empty($_SESSION['success_message'])) { ?>
           <div class="alert alert-success">

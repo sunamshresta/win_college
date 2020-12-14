@@ -1,17 +1,16 @@
 <?php 
-  $page='student';
-  session_start();
-  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
-    session_destroy();
-    header('location: ../login.php');
-  }
+session_start();
+  $page='admin';
+  $username = "";
+$email = "";
+$errors = [];
  ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WIN College | Student</title>
+    <title>WIN College | Logout</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
@@ -45,20 +44,34 @@
           <!-- Page Header-->
           <header class="page-header">
             <div class="container-fluid">
-              <h2 class="no-margin-bottom">Student</h2>
+              <h2 class="no-margin-bottom">Admin</h2>
             </div>
           </header>
           <?php 
-            include '../includes/success.php';
-            include '../includes/error.php';
+        if (!empty($_SESSION['error_message'])) {
+          $errors = [$_SESSION['error_message']];
+        }
+        
+        if (count($errors) > 0 AND !empty($_SESSION['error_message'])): ?>
+          <div class="alert alert-danger">
+            <?php foreach ($errors as $error): ?>
+            <li>
+              <?php echo $error; ?>
+            </li>
+            <?php endforeach;?>
+          </div>
+        <?php endif;
+
             require 'connection.php';
 
-	        $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student' and u.deleted=false";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
 
-	        $result=mysqli_query($conn,$query);
+          $result=mysqli_query($conn,$query);
+          $user= mysqli_fetch_assoc($result);
            ?>
+			
           
-           <section class="tables">   
+           <section class="edit">   
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-12">
@@ -66,46 +79,36 @@
                     <div class="card-close">
                       <div class="dropdown">
                         <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow">
-                          <a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a>
-                        </div>
+                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student List</h3>
+                      <h3 class="h4">Admin <em>[Add]</em></h3>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                        <table class="table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Full Name</th>
-                              <th>Username</th>
-                              <th>Status</th>
-                              <th>Action</th>	
-                            </tr>
-                          </thead>
-                          <tbody>
-                          	<?php 
-                          		$i=0; 
-                          		while ($user=mysqli_fetch_assoc($result)) { 
-                  			?>
-                          	
-                            <tr>
-                              <th scope="row"><?php echo ++$i; ?></th>
-                              <td><?php echo $user['firstname'].' '; echo $user['middlename'].' ';echo $user['lastname']; ?></td>
-                              <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
-                              <td>
-                              	<a class="fa fa-eye" href="student_detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                              	<a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="student_edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
-                              	<a class="fa fa-trash" href="student_delete.php?id='<?php echo $user['id']; ?>'" onclick="return confirm('Do you want to delete the student?')"></a>
-                              </td>
-                            </tr>
-                          	<?php ; } ?>
-                          </tbody>
-                        </table>
+                         <form action="add_admin_action.php" method="post">
+                            <div class="form-group">
+                              <label>Username</label>
+                              <input type="text" name="username" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <label>Email</label>
+                              <input type="text" name="email" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <label>Password</label>
+                              <input type="password" name="password" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <label>Password Confirm</label>
+                              <input type="password" name="passwordConf" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group">
+                              <button type="submit" name="add-btn" class="btn btn-lg btn-block btn-primary">Add</button>
+                            </div>
+                          </form>
+
                       </div>
                     </div>
                   </div>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>WIN Colleg | Login</title>
+  <title>WIN College | Login</title>
   <link rel="shortcut icon" href="favicon.png">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
@@ -63,7 +63,7 @@
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="gender" value="other" reqired>Other
+                <input type="radio" class="form-check-input" name="gender" value="other" required>Other
               </label>
             </div>
           </div>
@@ -100,7 +100,7 @@
             <input type="password" name="passwordConf" class="form-control form-control-lg" required>
           </div>
           <div class="form-group">
-            <button type="submit" name="register-btn" class="btn btn-lg btn-block">Sign Up</button>
+            <button type="submit" name="register-btn" class="btn btn-lg btn-block">Register</button>
           </div>
         </form>
         <p>Already have an account? <a href="login.php">Login</a></p>
