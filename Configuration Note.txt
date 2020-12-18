@@ -1,8 +1,9 @@
 Required Setups:
 
 1:database setup -
--import win_college.sql in database
+-import win_college.sql from database folder.
 -open connection.php inside Auth folder and change the $userName and $password values as per your MAMP setup.
+-change $db value as your database name.
 
 2:for emailverification on register -
 -need composer setup to obtain registration email verification 
