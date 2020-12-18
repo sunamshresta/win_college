@@ -3,8 +3,8 @@
 
 // Create the Transport
 $transport = (new Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl'))
-    ->setUsername('sunam.social@gmail.com')
-    ->setPassword('mero@password');
+    ->setUsername(SENDER_EMAIL)
+    ->setPassword(SENDER_PASSWORD);
 
 // Create the Mailer using your created Transport
 $mailer = new Swift_Mailer($transport);
@@ -45,7 +45,7 @@ function sendVerificationEmail($userEmail, $token)
 
     // Create a message
     $message = (new Swift_Message('Email Verification'))
-        ->setFrom('sunam.social@gmail.com')
+        ->setFrom(SENDER_EMAIL)
         ->setTo($userEmail)
         ->setBody($body, 'text/html');
 

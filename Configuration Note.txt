@@ -1,0 +1,35 @@
+Required Setups:
+
+1:database setup -
+-import win_college.sql in database
+-open connection.php inside Auth folder and change the $userName and $password values as per your MAMP setup.
+
+2:for emailverification on register -
+-need composer setup to obtain registration email verification 
+ (install it from composer.org and configure)
+-open send.php search and update SENDER_EMAIL,SENDER_PASSWORD with your credentials
+-To receive email, sign into your Gmail on your browser, go to https://myaccount.google.com/security#connectedapps and change the' Allow less secure apps' value to ON. 
+
+
+Credentials:
+username: superadmin
+password: 123456
+(for all activities of admin and students)
+
+#admin::
+
+username: admin
+password: admin
+
+#student::
+
+username: student
+password: student
+
+
+Note:
+-for other credentials of admin and students username and password both are username
+-for student credential if username is less than 6 character than password is 2 times username
+eg::
+username: alex
+password: alexalex

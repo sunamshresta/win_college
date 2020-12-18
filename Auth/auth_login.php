@@ -42,7 +42,7 @@ if (isset($_POST['login-btn'])) {
 
                         if ($user['type'] == 'student') {
                             header('location: student/index.php');
-                        } elseif ($user['type'] == 'admin') {
+                        } else {
                             header('location: admin/index.php');
                         }
                     } else { //unverified login
