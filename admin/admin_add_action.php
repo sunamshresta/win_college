@@ -1,5 +1,6 @@
 <?php 
-require 'connection.php';
+session_start();
+require '../Auth/connection.php';
 // Add admin
 if (isset($_POST['add-btn'])) {
     if (empty($_POST['username'])) {
@@ -36,7 +37,7 @@ if (isset($_POST['add-btn'])) {
         $user_result = $user_stmt->execute();
 
         if ($user_result) {
-            // $user_stmt->close();
+            $user_stmt->close();
             
             $_SESSION['success_msg'] = 'Admin has been added successfully.';
             header('location: admin.php');

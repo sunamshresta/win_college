@@ -36,15 +36,15 @@ function sendVerificationEmail($userEmail, $token)
 
     <body>
       <div class="wrapper">
-        <p>Thank you for signing up on our site. Please click on the link below to verify your account:.</p>
-        <a href="http://localhost:9001/win-college/emailConfig/verify.php?token=' . $token . '">Verify Email!</a>
+        <p>Thank you for signing up on WIN College. Please click on the link below to verify your account:.</p>
+        <a href="http://localhost:9001/win-college/Auth/verify.php?token=' . $token . '">Verify Email!</a>
       </div>
     </body>
 
     </html>';
 
     // Create a message
-    $message = (new Swift_Message('Verify your email'))
+    $message = (new Swift_Message('Email Verification'))
         ->setFrom('sunam.social@gmail.com')
         ->setTo($userEmail)
         ->setBody($body, 'text/html');

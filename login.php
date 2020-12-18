@@ -1,6 +1,14 @@
 <?php 
-include 'emailConfig/auth_login.php';
-// session_start();
+include 'Auth/auth_login.php';
+// echo $_SESSION['id'];
+if ( (!empty($_SESSION['id'])) && ($_SESSION['verified'] == 1) && (!empty($_COOKIE['user'])) ) {
+  if ($_SESSION['type'] == 'student') {
+    header('location: student/index.php');
+  } else {
+    header('location: admin/index.php');
+  }
+}
+
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,15 +18,24 @@ include 'emailConfig/auth_login.php';
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>WIN College | Login</title>
   <link rel="shortcut icon" href="favicon.png">
+  <style type="text/css">
+    body{
+      background: url('attachments/new_logo.jpg');
+      /*opacity: 0.999;*/
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="shortcut icon" href="favicon.png">
+
 </head>
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-md-4 offset-md-4 form-wrapper auth login">
+      <div class="col-md-4 offset-md-4 form-wrapper auth login" >
         <h3 class="text-center form-title">Login</h3>
         <?php 
         if (!empty($_SESSION['error_msg'])) {
@@ -37,15 +54,15 @@ include 'emailConfig/auth_login.php';
         <?php endif;?>
         <?php unset($_SESSION['error_msg']); ?>
 
-        <?php if (!empty($_SESSION['success_message'])) { ?>
+        <?php if (!empty($_SESSION['success_msg'])) { ?>
           <div class="alert alert-success">
             <li>
-              <?php echo $_SESSION['success_message']; ?>
+              <?php echo $_SESSION['success_msg']; ?>
             </li>
           </div>
         <?php 
           }
-          unset($_SESSION['success_message']);
+          unset($_SESSION['success_msg']);
            ?>
         <form action="login.php" method="post">
           <div class="form-group">

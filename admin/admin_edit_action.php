@@ -1,13 +1,13 @@
 <?php 
 session_start();
-include 'connection.php';
+include '../Auth/connection.php';
+
 if(isset($_POST['edit-btn']))
 {
 	$id=($_POST['id']);
     $email = $_POST['email'];
     $username = $_POST['username'];
     $type = "admin";
-    echo $id;
     // echo $email;exit;
 
 	// $detail_query="UPDATE users SET email=?, username=? WHERE id=? AND type=?";

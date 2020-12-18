@@ -1,6 +1,8 @@
 <?php 
   session_start();
   $page='course';
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -47,7 +49,7 @@
 
           <?php
           include '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
           $courseId = $_GET['id'];
 
           $query = "SELECT c.* FROM courses as c WHERE c.Course_ID=$courseId";

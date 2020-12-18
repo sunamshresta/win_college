@@ -6,7 +6,7 @@ $email = "";
 $errors = [];
 $success = [];
 
-$conn = new mysqli('localhost', 'root', '', 'win_college');
+include 'connection.php';
 
 // Regiser user
 if (isset($_POST['register-btn'])) {
@@ -19,8 +19,8 @@ if (isset($_POST['register-btn'])) {
     if (empty($_POST['password'])) {
         $errors['password'] = 'Password required';
     }
-    if (isset($_POST['password']) && $_POST['password'] !== $_POST['passwordConf']) {
-        $errors['passwordConf'] = 'The two passwords do not match';
+    if (isset($_POST['password']) && $_POST['password'] !== $_POST['confirmPassword']) {
+        $errors['confirmPassword'] = 'The two passwords do not match';
     }
 
     $firstName = $_POST['firstName'];
@@ -32,10 +32,13 @@ if (isset($_POST['register-btn'])) {
     $address2 = $_POST['temporaryAddress'];
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
+    $course = $_POST['course'];
     $username = $_POST['username'];
     $token = bin2hex(random_bytes(50)); // generate unique token
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); //encrypt password
     $type = 'student';
+    echo $course;
+    // exit;
 
     // Check if email already exists
     $sql = "SELECT * FROM users WHERE email='$email' LIMIT 1";
@@ -46,9 +49,9 @@ if (isset($_POST['register-btn'])) {
 
     if (count($errors) === 0) {
 
-        $detail_query = "INSERT INTO student_details SET first_name=?,middle_name=?,last_name=?,dob=?,gender=?,address1=?,address2=?,email=?,mobile=?";
+        $detail_query = "INSERT INTO student_details SET first_name=?,middle_name=?,last_name=?,dob=?,gender=?,address1=?,address2=?,email=?,mobile=?,course=?";
         $detail_stmt = $conn->prepare($detail_query);
-        $detail_stmt->bind_param('sssssssss', $firstName, $middleName, $lastName, $dob, $gender, $address1,$address2,$email,$mobile);
+        $detail_stmt->bind_param('ssssssssss', $firstName, $middleName, $lastName, $dob, $gender, $address1, $address2, $email, $mobile, $course);
         $detail_result = $detail_stmt->execute();
         // echo $detail_stmt->insert_id;exit;
 
@@ -68,11 +71,11 @@ if (isset($_POST['register-btn'])) {
             $_SESSION['username'] = $username;
             $_SESSION['email'] = $email;
             $_SESSION['verified'] = false;
-            $_SESSION['success_message'] = 'You have registered sucessfully! Please check you email to verify your account';
+            $_SESSION['success_msg'] = 'You have registered sucessfully! Please check email to verify your account.';
 
             header('location: login.php');
         } else {
-            $_SESSION['error_msg'] = "Database error: Could not register user";
+            $_SESSION['error_msg'] = "Database error: Could not register user.";
         }
     }
 }

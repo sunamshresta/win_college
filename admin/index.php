@@ -1,12 +1,10 @@
 <?php 
   
   session_start();
-  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
-    session_destroy();
-    header('location: ../login.php');
-  }
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
 
-  include 'connection.php';
+  include '../Auth/connection.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -90,7 +88,7 @@
                        ?>
                     <div class="title"><span>Active<br>Students</span>
                       <div class="progress">
-                        <div role="progressbar" style="width: 4%; height: 4px;" aria-valuenow="<?php echo $active_student_count; ?>" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
+                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="<?php echo $active_student_count; ?>" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
                       </div>
                     </div>
                     <div class="number">

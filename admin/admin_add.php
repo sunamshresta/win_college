@@ -1,7 +1,9 @@
 <?php 
 session_start();
-  $page='admin';
-  $username = "";
+$page='admin';
+// redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+require 'includes/redirect.php';
+$username = "";
 $email = "";
 $errors = [];
  ?>
@@ -60,16 +62,7 @@ $errors = [];
             </li>
             <?php endforeach;?>
           </div>
-        <?php endif;
-
-            require 'connection.php';
-
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
-
-          $result=mysqli_query($conn,$query);
-          $user= mysqli_fetch_assoc($result);
-           ?>
-			
+        <?php endif; ?>			
           
            <section class="edit">   
             <div class="container-fluid">
@@ -87,7 +80,7 @@ $errors = [];
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                         <form action="add_admin_action.php" method="post">
+                         <form action="admin_add_action.php" method="post">
                             <div class="form-group">
                               <label>Username</label>
                               <input type="text" name="username" class="form-control form-control-lg">
@@ -101,7 +94,7 @@ $errors = [];
                               <input type="password" name="password" class="form-control form-control-lg">
                             </div>
                             <div class="form-group">
-                              <label>Password Confirm</label>
+                              <label>Confirm Password</label>
                               <input type="password" name="passwordConf" class="form-control form-control-lg">
                             </div>
                             <div class="form-group">

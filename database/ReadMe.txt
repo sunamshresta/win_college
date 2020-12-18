@@ -1,2 +1,3 @@
--create database: win_college
--import .sql file
+-Create database: win_college
+-Import .sql file
+-Go to Auth/connection.php and change your $userName and $password as per your MAMP config.

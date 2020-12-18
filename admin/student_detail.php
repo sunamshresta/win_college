@@ -1,6 +1,8 @@
 <?php 
   session_start();
   $page='student';
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -47,10 +49,10 @@
 
           <?php
           include '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
           $userId = $_GET['id'];
 
-          $query = "SELECT u.id as id, u.username as username, u.email as userEmail, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, CONCAT(d.first_name,' ',d.middle_name, ' ', d.last_name) as fullname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
+          $query = "SELECT u.id as id, u.username as username, u.email as userEmail, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, CONCAT(d.first_name,' ',d.middle_name, ' ', d.last_name) as fullname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile, c.Course_ID as courseId, c.Course_Name as courseName FROM users as u LEFT join student_details as d ON u.student_detail= d.id LEFT join courses as c ON d.course=c.Course_ID WHERE u.type='student' and d.id =$userId";
 
           $result=mysqli_query($conn,$query);
           $user= mysqli_fetch_assoc($result);
@@ -120,10 +122,71 @@
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                               <strong>Status</strong>
-                              <span class=""><?php echo ($user['verified']==1) ? 'Active' : 'Pending'; ?></span>
+                              <span class=""><?php echo ($user['verified']==1) ? 'Active' : 'Pending' ?></span>
                             </li>
                           </ul>
                         </div>
+                      </div>
+                      
+                      <div class="row">
+                        <?php 
+
+                          $courseId = $user['courseId'];
+                          $query = "SELECT c.* FROM courses as c WHERE c.Course_ID=$courseId";
+
+                          $result=mysqli_query($conn,$query);
+                          $course= mysqli_fetch_assoc($result);
+                         ?>
+                        <div class="col-md-12">
+                          <h4 class="text-center bg-secondary"><em>Course</em></h4>
+                          <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>Course Name</strong>
+                              <span class=""><?php echo $course['Course_Name']; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>VET Qual</strong>
+                              <span class=""><?php echo $course['VET_Qual']; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <strong>Cricos Qual</strong>
+                              <span class=""><?php echo $course['Cricos_Qual']; ?></span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                          <div class="table-responsive">                       
+                            <table class="table table-striped table-hover">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Subject Name</th>
+                                  <th>Code</th>
+                                  <th>Term</th> 
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php 
+                                $query = "SELECT s.* FROM subjects as s WHERE s.Course_ID=$courseId";
+
+                                  $result=mysqli_query($conn,$query);
+                                  // $course= mysqli_fetch_assoc($result);
+                                  $i=0; 
+                                  while ($subject=mysqli_fetch_assoc($result)) { 
+                            ?>
+                                
+                                <tr>
+                                  <th scope="row"><?php echo ++$i; ?></th>
+                                  <td><?php echo $subject['UOC_Name']; ?></td>
+                                  <td><?php echo $subject['UOC_Code']; ?></td>
+                                  <td><?php echo $subject['Term']; ?></td>
+                                </tr>
+                                <?php ; } ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>

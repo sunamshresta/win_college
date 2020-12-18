@@ -1,10 +1,8 @@
 <?php 
   $page='admin';
   session_start();
-  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
-    session_destroy();
-    header('location: ../login.php');
-  }
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -51,9 +49,9 @@
           <?php
           require '../includes/success.php';
           require '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
 
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified FROM users as u  WHERE u.type='admin' and deleted=false";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, u.type and type FROM users as u  WHERE u.type='admin' and deleted=false";
 
           $result=mysqli_query($conn,$query);
            ?>
@@ -74,7 +72,7 @@
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Admin List</h3>
+                      <h3 class="h4">List of Admins</h3>
                       
                     </div>
                     <div class="card-body">
@@ -100,8 +98,10 @@
                               <td><?php echo $user['verified']== 1 ? 'Active' : 'Pending'; ?></td>
                               <td>
                                 <a class="fa fa-eye btn btn-secondary" href="admin_detail.php?id='<?php echo $user["id"]; ?>'"> </a>
+                                <?php if($_SESSION['id'] == $user['id'] || $_SESSION['type'] == 'superadmin'){ ?>
                                 <a class="fa fa-edit btn btn-primary" href="admin_edit.php?id='<?php echo $user["id"]; ?>'"></a>
                                 <a class="fa fa-trash btn btn-danger" href="admin_delete.php?id='<?php echo($user["id"]) ?>'" onclick="return confirm('Do you want to delete?')"></a>
+                              <?php } ?>
                               </td>
                             </tr>
                             <?php ; } ?>

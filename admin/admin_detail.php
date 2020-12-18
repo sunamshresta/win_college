@@ -1,6 +1,8 @@
 <?php 
   session_start();
   $page='admin';
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -47,13 +49,19 @@
 
           <?php
           include '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
           $userId = $_GET['id'];
 
-          $query = "SELECT u.id as id, u.username as username, u.email as userEmail, u.verified as verified FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='admin'";
+          $query = "SELECT u.id as id, u.username as username, u.email as userEmail, u.verified as verified FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='admin' and u.id=$userId and u.deleted=false";
 
           $result=mysqli_query($conn,$query);
-          $user= mysqli_fetch_assoc($result);
+          // echo mysqli_num_rows($result);
+          // if (mysqli_num_rows($result) <= 0) {
+          //   $_SESSION['error_msg'] = 'Invalid request';
+          //   header('location: admin.php');
+          //   exit();
+          // }
+            $user= mysqli_fetch_assoc($result);
            ?>
           
            <section class="edit">   

@@ -1,8 +1,8 @@
 <?php 
 $page='course';
 session_start();
-// redirect user to login page if they're not logged in
-if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 'student')) {
+// redirect user to login page if they're not logged in | unverified | not student type | cookie expired 
+if ( (empty($_SESSION['id'])) || ($_SESSION['verified'] == 0) || ($_SESSION['type'] != 'student') || (empty($_COOKIE['user'])) ) {
     session_destroy();
     header('location: ../login.php');
 }
@@ -131,7 +131,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
             <!-- <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li> -->
-            <li class="<?php if($page=='student'){ echo 'active'; } ?>"><a href="index.php"> <i class="fa fa-users"></i>Student </a></li>
+            <li class="<?php if($page=='profile'){ echo 'active'; } ?>"><a href="profile.php"> <i class="fa fa-users"></i>Profile </a></li>
             <li class="<?php if($page=='course'){ echo 'active'; } ?>"><a href="course.php"> <i class="fa fa-book"></i>Courses </a></li>
             
           </ul>
@@ -144,7 +144,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
             </div>
           </header>
          <?php
-         include '../admin/connection.php';
+         include '../Auth/connection.php';
          $courseId = $_GET['id'];
 
           $query = "SELECT c.* FROM courses as c WHERE c.Course_ID=$courseId";

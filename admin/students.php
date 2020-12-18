@@ -1,10 +1,8 @@
 <?php 
   $page='student';
   session_start();
-  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
-    session_destroy();
-    header('location: ../login.php');
-  }
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -51,9 +49,9 @@
           <?php 
             include '../includes/success.php';
             include '../includes/error.php';
-            require 'connection.php';
+            require '../Auth/connection.php';
 
-	        $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student' and u.deleted=false";
+	        $query = "SELECT u.id as id, u.username as username, u.verified as verified, u.student_detail as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student' and u.deleted=false";
 
 	        $result=mysqli_query($conn,$query);
            ?>
@@ -72,7 +70,7 @@
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student List</h3>
+                      <h3 class="h4">List of Students</h3>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
@@ -96,11 +94,11 @@
                               <th scope="row"><?php echo ++$i; ?></th>
                               <td><?php echo $user['firstname'].' '; echo $user['middlename'].' ';echo $user['lastname']; ?></td>
                               <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
+                              <td><?php echo $user['verified']== 1 ? 'Verified' : 'Pending'; ?></td>
                               <td>
-                              	<a class="fa fa-eye" href="student_detail.php?id='<?php echo $user["id"]; ?>'"> </a>
-                              	<a class="fa fa-edit <?php echo $user['verified'] == 0 ? 'disabled' : '' ?>" href="student_edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
-                              	<a class="fa fa-trash" href="student_delete.php?id='<?php echo $user['id']; ?>'" onclick="return confirm('Do you want to delete the student?')"></a>
+                              	<a class="fa fa-eye" href="student_detail.php?id='<?php echo $user["detailId"]; ?>'"> </a>
+                              	<a class="fa fa-edit" href="student_edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
+                              	<a class="fa fa-trash" href="student_delete.php?id='<?php echo $user['detailId']; ?>'" onclick="return confirm('Do you want to delete the student?')"></a>
                               </td>
                             </tr>
                           	<?php ; } ?>

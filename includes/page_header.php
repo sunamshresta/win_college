@@ -12,7 +12,7 @@
       <li class="<?php if($page=='about'){ echo 'active'; } ?>"><a href="about.php">About Us</a></li>
       <li class="<?php if($page=='course'){ echo 'active'; } ?>"><a href="course.php">Courses</a></li>
       <li class="<?php if($page=='contact'){ echo 'active'; } ?>"><a href="contact.php">Contact</a></li>
-      <li><a href="#">Login</a></li>
+      <li><a href="../login.php">Login</a></li>
     </ul>
   </nav>
 </header>

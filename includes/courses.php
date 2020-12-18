@@ -162,11 +162,11 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-md-12 mb-0">
+        <div class="col-md-12 mt-0 mb-0">
           <div class="section-heading">
-            <h2>View All Course</h2>
+            <a href="pages/course.php"><h2>View All Course</h2></a>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </section>

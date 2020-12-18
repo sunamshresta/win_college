@@ -1,8 +1,8 @@
 <?php 
 $page='student';
 session_start();
-// redirect user to login page if they're not logged in
-if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 'student')) {
+// redirect user to login page if they're not logged in | unverified | not student type | cookie expired 
+if ( (empty($_COOKIE['user'])) || (empty($_SESSION['id'])) || ($_SESSION['verified'] == 0) || ($_SESSION['type'] != 'student') ) {
     session_destroy();
     header('location: ../login.php');
 }
@@ -131,7 +131,7 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
             <!-- <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li> -->
-            <li class="<?php if($page=='student'){ echo 'active'; } ?>"><a href="index.php"> <i class="fa fa-users"></i>Student </a></li>
+            <li class="<?php if($page=='profile'){ echo 'active'; } ?>"><a href="profile.php"> <i class="fa fa-user"></i>Profile </a></li>
             <li class="<?php if($page=='course'){ echo 'active'; } ?>"><a href="course.php" title="Edit profile"> <i class="fa fa-book"></i>Courses </a></li>
             
           </ul>
@@ -140,9 +140,10 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
           <!-- Page Header-->
           <header class="page-header">
             <div class="container-fluid">
-              <h2 class="no-margin-bottom">Dashboard</h2>
+              <h2 class="no-margin-bottom">Welcome <span><?php echo $_COOKIE['user']; ?></span></h2>
             </div>
           </header>
+          <?php #echo $_COOKIE['user']; ?>
           <?php if (!empty($_SESSION['success_msg'])) { ?>
             <div class="alert alert-success">
               <li>
@@ -159,62 +160,8 @@ if (empty($_SESSION['id'] && $_SESSION['verified'] == 1 || $_SESSION['type'] != 
               <div class="row">
                 <div class="col-md-12">
                   <div class="card">
-                    <div class="card-close">
-                      <div class="dropdown">
-                        <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
-                      </div>
-                    </div>
-                    <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Welcome <?php echo $_SESSION['username']; ?></h3>
-                    </div>
-                    <div class="card-body">
-                      <div class="table-responsive">                       
-                        <table class="table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Full Name</th>
-                              <th>Username</th>
-                              <th>Status</th>
-                              <th>Action</th> 
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php 
-
-                              require '../admin/connection.php';
-                              $id = $_SESSION['id'];
-
-                              $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u RIGHT join student_details as d ON u.student_detail= d.id WHERE u.type='student' AND u.id = '$id'";
-
-                              $result=mysqli_query($conn,$query);
-                              $i=0; 
-                              while ($user=mysqli_fetch_assoc($result)) { 
-                                // echo "<pre>";
-                                // echo $id."<br>";
-                                // print_r($result);
-                                // print_r('user');
-                                // print_r($user);
-                                // echo "</pre>";
-                                // echo $user['detailId'];
-                        ?>
-                            
-                            <tr>
-                              <th scope="row"><?php echo ++$i; ?></th>
-                              <td><?php echo $user['firstname'].' '; echo $user['middlename'].' ';echo $user['lastname']; ?></td>
-                              <td><?php echo $user['username']; ?></td>
-                              <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
-                              <td>
-                                <a class="fa fa-edit" href="edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
-                              </td>
-                            </tr>
-                            <?php  } ?>
-
-
-                          </tbody>
-                        </table>
-                      </div>
+                    <div class="col-sm-12 col-md-8 offset-md-3">
+                      <img src="../attachments/Win_Coll_Logo_Main_High_Res_V0305122018.jpg" alt="college logo" width="460">
                     </div>
                   </div>
                 </div>

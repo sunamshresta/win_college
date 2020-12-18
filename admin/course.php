@@ -1,10 +1,8 @@
 <?php 
   $page='course';
   session_start();
-  if (!$_SESSION['id'] || !$_SESSION['username'] || $_SESSION['type'] != 'admin') {
-    session_destroy();
-    header('location: ../login.php');
-  }
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -51,7 +49,7 @@
           <?php
           require '../includes/success.php';
           require '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
 
           $query = "SELECT * FROM courses";
 

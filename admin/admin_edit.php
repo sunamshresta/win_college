@@ -1,6 +1,8 @@
 <?php 
   session_start();
   $page='admin';
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -47,11 +49,11 @@
 
           <?php
           include '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
+          
           $userId = $_GET['id'];
-          echo "$userId";
 
-          $query = "SELECT u.id as id, u.username as username, u.email as email FROM users as u WHERE u.id=$userId";
+          $query = "SELECT u.id as id, u.username as username, u.email as email FROM users as u WHERE u.type='admin' and u.id=$userId and u.deleted=false";
 
           $result=mysqli_query($conn,$query);
           $user= mysqli_fetch_assoc(($result));

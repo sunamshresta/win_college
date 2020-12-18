@@ -1,25 +1,37 @@
+<?php 
+$page='profile';
+session_start();
+// redirect user to login page if they're not logged in | unverified | not student type | cookie expired 
+if ( (empty($_COOKIE['user'])) || (empty($_SESSION['id'])) || ($_SESSION['verified'] == 0) || ($_SESSION['type'] != 'student') ) {
+    session_destroy();
+    header('location: ../login.php');
+}
+  // include '../emailConfig/auth.php';
+
+?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WIN College</title>
+    <title>WIN College | Student-Portal</title>
+    <link rel="shortcut icon" href="../favicon.png">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
 
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../admin/assets/vendor/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../admin/assets/vendor/font-awesome/css/font-awesome.min.css">
     <!-- Fontastic Custom icon font-->
-    <link rel="stylesheet" href="../assets/css/fontastic.css">
+    <link rel="stylesheet" href="../admin/assets/css/fontastic.css">
     <!-- Google fonts - Poppins -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="../admin/assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../admin/assets/css/custom.css">
     <!-- Favicon-->
     <!-- <link rel="shortcut icon" href="img/favicon.ico"> -->
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -42,7 +54,7 @@
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <!-- Navbar Header-->
               <div class="navbar-header">
-                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                <!-- Navbar Brand --><a href="index.php" class="navbar-brand d-none d-sm-inline-block">
                   <div class="brand-text d-none d-lg-inline-block"><span>WIN </span><strong> Dashboard</strong></div>
                   <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
                 <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
@@ -110,17 +122,17 @@
         <nav class="side-navbar">
           <!-- Sidebar Header-->
           <div class="sidebar-header d-flex align-items-center">
-            <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="avatar"><img src="../admin/img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
             <div class="title">
-              <h1 class="h4">Mark Stephen</h1>
-              <p>Web Designer</p>
+              <h1 class="h4"><?php echo strtoupper($_SESSION['username']); ?></h1>
+              <p><?php echo $_SESSION['verified'] == 1 ? 'Verified' : 'Pending'; ?></p>
             </div>
           </div>
           <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
           <ul class="list-unstyled">
-            <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li>
-            <li class="active"><a href="student.php"> <i class="fa fa-users"></i>Student </a></li>
-            <li><a href="tables.html"> <i class="icon-grid"></i>Courses </a></li>
+            <!-- <li class=""><a href="index.php"> <i class="icon-user"></i>Admin </a></li> -->
+            <li class="<?php if($page=='profile'){ echo 'active'; } ?>"><a href="profile.php"> <i class="fa fa-user"></i>Profile </a></li>
+            <li class="<?php if($page=='course'){ echo 'active'; } ?>"><a href="course.php" title="Edit profile"> <i class="fa fa-book"></i>Courses </a></li>
             
           </ul>
         </nav>
@@ -131,19 +143,19 @@
               <h2 class="no-margin-bottom">Dashboard</h2>
             </div>
           </header>
-
+          <?php #echo $_COOKIE['user']; ?>
+          <?php if (!empty($_SESSION['success_msg'])) { ?>
+            <div class="alert alert-success">
+              <li>
+                <?php echo $_SESSION['success_msg']; ?>
+              </li>
+            </div>
           <?php 
-
-            require '../connection.php';
-            $userId = $_GET['id'];
-
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
-
-          $result=mysqli_query($conn,$query);
-          $user= mysqli_fetch_assoc($result);
+            }
+            unset($_SESSION['success_msg']);
            ?>
           
-           <section class="edit">   
+           <section class="tables">   
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-12">
@@ -155,65 +167,55 @@
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student <em>[Update]</em></h3>
+                      <h3 class="h4">Profile</h3>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
-                         <form action="edit_action.php" method="post">
-                            <div class="form-group">
-                              <label>First Name</label>
-                              <input type="text" name="firstName" class="form-control form-control-lg" value="<?php echo $user['firstname']; ?>" >
-                            </div>
-                            <div class="form-group">
-                              <label>Middle Name</label>
-                              <input type="text" name="middleName" class="form-control form-control-lg" value="<?php echo $user['middlename']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Last Name</label>
-                              <input type="text" name="lastName" class="form-control form-control-lg" value="<?php echo $user['lastname']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Gender</label>
-                              <input type="text" name="gender" value="male" class="form-control form-control-lg" value="<?php echo $user['gender']; ?>">
-                              <!-- Male -->
-                              <!-- <input type="radio" name="gender" value="female" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Female -->
-                              <!-- <input type="radio" name="gender" value="other" class="form-control form-control-lg" value="<?php echo $user['']; ?>">Other -->
-                            </div>
-                            <div class="form-group">
-                              <label>DOB</label>
-                              <input type="date" name="dob" class="form-control form-control-lg" value="<?php echo $user['dob']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Permanent Address</label>
-                              <input type="text" name="permanentAddress" class="form-control form-control-lg" value="<?php echo $user['address1']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Temporary Address</label>
-                              <input type="text" name="temporaryAddress" class="form-control form-control-lg" value="<?php echo $user['address2']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Email</label>
-                              <input type="text" name="email" class="form-control form-control-lg" value="<?php echo $user['email']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Mobile Number</label>
-                              <input type="text" name="mobile" class="form-control form-control-lg" value="<?php echo $user['mobile']; ?>">
-                            </div>
-                            <div class="form-group">
-                              <label>Username</label>
-                              <input type="text" name="username" class="form-control form-control-lg disabled" disabled="disabled" value="<?php echo $user['username']; ?>">
-                            </div>
+                        <table class="table table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Full Name</th>
+                              <th>Username</th>
+                              <th>Status</th>
+                              <th>Action</th> 
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php 
 
-                            <input type="hidden" name="id" value="<?php echo $userId; ?>">
-                            <div class="form-group">
-                              <button type="submit" name="edit-btn" class="btn btn-lg btn-block">Update</button>
-                            </div>
-                          </form>
-                          <?php 
+                              require '../Auth/connection.php';
+                              $id = $_SESSION['id'];
 
-                          
+                              $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.id as detailId, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname  FROM users as u RIGHT join student_details as d ON u.student_detail= d.id WHERE u.type='student' AND u.id = '$id'";
 
-                           ?>
+                              $result=mysqli_query($conn,$query);
+                              $i=0; 
+                              while ($user=mysqli_fetch_assoc($result)) { 
+                                // echo "<pre>";
+                                // echo $id."<br>";
+                                // print_r($result);
+                                // print_r('user');
+                                // print_r($user);
+                                // echo "</pre>";
+                                // echo $user['detailId'];
+                        ?>
+                            
+                            <tr>
+                              <th scope="row"><?php echo ++$i; ?></th>
+                              <td><?php echo $user['firstname'].' '; echo $user['middlename'].' ';echo $user['lastname']; ?></td>
+                              <td><?php echo $user['username']; ?></td>
+                              <td><?php echo $user['verified']== 1 ? 'verified' : 'pending' ?></td>
+                              <td>
+                                <a class="fa fa-eye" href="detail.php?id='<?php echo $user["detailId"]; ?>'"> </a>
+                                <a class="fa fa-edit" href="edit.php?id='<?php echo $user["detailId"]; ?>'"> </a>
+                              </td>
+                            </tr>
+                            <?php  } ?>
+
+
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
@@ -238,14 +240,14 @@
       </div>
     </div>
     <!-- JavaScript files-->
-    <script src="../assets/vendor/jquery/jquery.min.js"></script>
-    <script src="../assets/vendor/popper.js/umd/popper.min.js"> </script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../assets/jquery.cookie/jquery.cookie.js"> </script>
-    <!-- <script src="../assets/chart.js/Chart.min.js"></script> -->
-    <script src="../assets/jquery-validation/jquery.validate.min.js"></script>
-    <!-- <script src="../assets/js/charts-home.js"></script> -->
+    <script src="../admin/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../admin/assets/vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="../admin/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../admin/assets/jquery.cookie/jquery.cookie.js"> </script>
+    <!-- <script src="../admin/assets/chart.js/Chart.min.js"></script> -->
+    <script src="../admin/assets/jquery-validation/jquery.validate.min.js"></script>
+    <!-- <script src="../admin/assets/js/charts-home.js"></script> -->
     <!-- Main File-->
-    <script src="../assets/js/front.js"></script>
+    <script src="../admin/assets/js/front.js"></script>
   </body>
 </html>

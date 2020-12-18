@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include '../admin/connection.php';
+include '../Auth/connection.php';
 
 if(isset($_POST['edit-btn']))
 {
@@ -14,11 +14,12 @@ if(isset($_POST['edit-btn']))
     $address2 = $_POST['temporaryAddress'];
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
+    $course = $_POST['course'];
     $type = 'student';
 
-	$detail_query="UPDATE student_details set first_name=?, middle_name=?, last_name=?, gender=?, dob=?, address1=?, address2=?, email=?, mobile=? where id=?;";
+	$detail_query="UPDATE student_details set first_name=?, middle_name=?, last_name=?, gender=?, dob=?, address1=?, address2=?, email=?, mobile=?, course=? where id=?;";
         $detail_stmt = $conn->prepare($detail_query);
-        $detail_stmt->bind_param('ssssssssss', $firstName, $middleName, $lastName, $gender, $dob, $address1,$address2,$email,$mobile,$id);
+        $detail_stmt->bind_param('sssssssssss', $firstName, $middleName, $lastName, $gender, $dob, $address1,$address2,$email,$mobile,$course,$id);
         $detail_result = $detail_stmt->execute();
 
 	if($detail_result) {

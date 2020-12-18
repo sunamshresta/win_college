@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include 'connection.php';
+include '../Auth/connection.php';
 
 $id=$_GET['id'];
 $query="UPDATE users set deleted=true where id=$id";

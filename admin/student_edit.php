@@ -1,6 +1,8 @@
 <?php 
   session_start();
   $page='student';
+  // redirect user to login page if they're not logged in | unverified | not admin type | cookie expired 
+  require 'includes/redirect.php';
  ?>
 <!DOCTYPE html>
 <html>
@@ -47,10 +49,10 @@
 
           <?php
           include '../includes/error.php';
-          require 'connection.php';
+          require '../Auth/connection.php';
           $userId = $_GET['id'];
 
-          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile  FROM users as u LEFT join student_details as d ON u.student_detail= d.id WHERE u.type='student'";
+          $query = "SELECT u.id as id, u.username as username, u.verified as verified, d.first_name as firstname, d.middle_name as middlename, d.last_name as lastname, d.dob as dob, d.gender as gender, d.address1 as address1, d.address2 as address2, d.email as email, d.mobile as mobile, c.Course_ID as courseId, c.Course_Name as courseName FROM users as u LEFT join student_details as d ON u.student_detail= d.id LEFT join courses as c ON d.course=c.Course_ID WHERE u.type='student'and d.id=$userId";
 
           $result=mysqli_query($conn,$query);
           $user= mysqli_fetch_assoc($result);
@@ -70,7 +72,7 @@
                       </div>
                     </div>
                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Student <em>[Update]</em></h3>
+                      <h3 class="h4">Student <em>[Edit]</em></h3>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">                       
@@ -124,6 +126,19 @@
                             <div class="form-group">
                               <label>Mobile Number</label>
                               <input type="text" name="mobile" class="form-control form-control-lg" value="<?php echo $user['mobile']; ?>">
+                            </div>
+                            <div class="form-group">
+                              <label>Choose Course</label>
+                              <?php 
+                                $course_query = "SELECT * FROM courses";
+                                $course_result = mysqli_query($conn, $course_query);
+                               ?>
+                              <select name="course" id="course" class="form-control form-control-md">
+                                <option name="course" value="<?php echo $user['courseId']; ?>"><?php echo $user['courseName']; ?></option>
+                                <?php while($course=mysqli_fetch_assoc($course_result)) { ?>
+                                <option name="course" value="<?php echo $course['Course_ID']; ?>"><?php echo $course['Course_Name']; ?></option>
+                                <?php } ?>
+                              </select>
                             </div>
                             <div class="form-group">
                               <label>Username</label>
